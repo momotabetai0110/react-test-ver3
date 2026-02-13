@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^6.22.3"
