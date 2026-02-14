@@ -1,5 +1,5 @@
 // import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [taskName, setTaskName] = useState<string>("");
@@ -49,6 +49,10 @@ export default function Home() {
     //画面向けに再取得
     setTaskList(taskList);
   }
+
+  useEffect(() => {
+    setTaskList(hasCookieTask());
+  }, []);
 
   return (
     <div>
