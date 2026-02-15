@@ -18,6 +18,11 @@ export default function Home() {
 
   //cookieにタスクを追加
   function setCookieTask(value: string) {
+
+    if(value == ""){
+      //値が空の時は何もしない
+      return
+    }
     //保存用配列にタスクをプッシュ
     const taskList = hasCookieTask();
     taskList.push(value);
@@ -63,6 +68,7 @@ export default function Home() {
             onSubmit={(e) => {
               setCookieTask(taskName);
               e.preventDefault();
+              setTaskName("")
             }}
           >
             <input
@@ -83,8 +89,8 @@ export default function Home() {
           {taskList.length !== 0 &&
             taskList.map((task, index) => {
               return (
-                <div className="App-task-card">
-                  <div className="App-task-item" key={index}>
+                <div className="App-task-card" key={index}>
+                  <div className="App-task-item">
                     {task}
                   </div>
                   <div>
