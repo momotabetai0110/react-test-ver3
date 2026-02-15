@@ -55,43 +55,50 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
-      <div>こんにちは</div>
-      {taskList !== null &&
-        taskList.map((task, index) => {
-          return (
-            <div>
-              <div key={index}>{task}</div>
-              <button
-                className="btn btn-danger"
-                onClick={() => deleteCookieTask(index)}
-              >
-                削除
-              </button>
-            </div>
-          );
-        })}
-      <form
-        onSubmit={(e) => {
-          setCookieTask(taskName);
-          e.preventDefault();
-        }}
-      >
-        <input
-          type="string"
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
-        />
-        <button className="btn btn-success" type="submit">
-          タスク追加
-        </button>
-      </form>
-      <button
-        className="btn btn-primary"
-        onClick={() => setCookieTask("仮タスク")}
-      >
-        保存
-      </button>
+    <div className="App">
+      <div className="App-header"></div>
+      <div className="App-body">
+        <div className="App-task-form">
+          <form
+            onSubmit={(e) => {
+              setCookieTask(taskName);
+              e.preventDefault();
+            }}
+          >
+            <input
+              className="App-task-input"
+              type="string"
+              value={taskName}
+              placeholder="タスクを入力..."
+              onChange={(e) => setTaskName(e.target.value)}
+            />
+            <button className="btn btn-primary" type="submit">
+              追加
+            </button>
+          </form>
+        </div>
+        <div className="App-task-list">
+          {taskList !== null &&
+            taskList.map((task, index) => {
+              return (
+                <div className="App-task-card">
+                  <div className="App-task-item" key={index}>
+                    {task}
+                  </div>
+                  <div>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => deleteCookieTask(index)}
+                    >
+                      削除
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </div>
+      <div className="App-footer"></div>
     </div>
   );
 }
