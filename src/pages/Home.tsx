@@ -77,8 +77,10 @@ export default function Home() {
             </button>
           </form>
         </div>
-        <div className="App-task-list">
-          {taskList !== null &&
+        <div
+          className={`App-task-list ${taskList.length === 0 ? "empty" : ""}`}
+        >
+          {taskList.length !== 0 &&
             taskList.map((task, index) => {
               return (
                 <div className="App-task-card">
@@ -96,6 +98,7 @@ export default function Home() {
                 </div>
               );
             })}
+          {taskList.length === 0 && <div>タスクはありません</div>}
         </div>
       </div>
       <div className="App-footer"></div>

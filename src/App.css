@@ -64,8 +64,21 @@
   border-radius: 10px;
   overflow-y: auto;
 }
+
+.App-task-list.empty {
+  color: rgb(167, 167, 167);
+  width: 80vw;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border: white solid 1px;
+  border-radius: 10px;
+  justify-content: center;
+}
+
 .App-task-card {
-  color: black;
+  color: rgb(138, 138, 138);
   display: flex;
   padding: 0.3rem;
   margin: 0.5rem;
