@@ -1,6 +1,7 @@
+import type { Task } from "../type/task";
 //cookieが存在するかチェック
 //マウント時に実行
-export function hasCookieTask(): string[] {
+export function hasCookieTask(): Task[] {
   try {
     const match = document.cookie.match(
       new RegExp("(?:^|; )" + encodeURIComponent("task") + "=([^;]*)"),
@@ -24,9 +25,10 @@ export function setCookieTask(value: string) {
       //値が空の時は何もしない
       return hasCookieTask();
     }
+    const newTask: Task = { id: crypto.randomUUID(), text: value };
     //保存用配列にタスクをプッシュ
     const taskList = hasCookieTask();
-    const newTaskList = [...taskList, value];
+    const newTaskList = [...taskList, newTask];
     //配列を文字列に変換
     const encodedValue = encodeURIComponent(JSON.stringify(newTaskList));
     saveCookieTask(encodedValue);
@@ -40,13 +42,13 @@ export function setCookieTask(value: string) {
 
 //cookieからタスクを削除
 //削除ボタン押下時に実行
-export function deleteCookieTask(target: number) {
+export function deleteCookieTask(targetId: string) {
   try {
     //指定したタスクを削除
     const taskList = hasCookieTask();
     //taskList.splice(target, 1);
-    const newTaskList = taskList.filter((_, index) => {
-      return index !== target;
+    const newTaskList = taskList.filter((task) => {
+      return task.id !== targetId;
     });
     //削除した配列でcookieを上書き
     const encodedValue = encodeURIComponent(JSON.stringify(newTaskList));

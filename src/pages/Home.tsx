@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { Task } from "../type/task";
 import {
   hasCookieTask,
   setCookieTask,
@@ -7,8 +8,7 @@ import {
 
 export default function Home() {
   const [taskName, setTaskName] = useState<string>("");
-  const [taskList, setTaskList] = useState<string[]>([]);
-
+  const [taskList, setTaskList] = useState<Task[]>([]);
 
   useEffect(() => {
     setTaskList(hasCookieTask());
@@ -42,14 +42,14 @@ export default function Home() {
           className={`App-task-list ${taskList.length === 0 ? "empty" : ""}`}
         >
           {taskList.length !== 0 &&
-            taskList.map((task, index) => {
+            taskList.map((task) => {
               return (
-                <div className="App-task-card" key={index}>
-                  <div className="App-task-item">{task}</div>
+                <div className="App-task-card" key={task.id}>
+                  <div className="App-task-item">{task.text}</div>
                   <div>
                     <button
                       className="btn btn-danger"
-                      onClick={() => setTaskList(deleteCookieTask(index))}
+                      onClick={() => setTaskList(deleteCookieTask(task.id))}
                     >
                       削除
                     </button>
