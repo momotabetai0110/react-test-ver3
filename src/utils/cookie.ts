@@ -1,7 +1,7 @@
 import type { Task } from "../type/task";
 //cookieが存在するかチェック
 //マウント時に実行
-export function hasCookieTask(): Task[] {
+export function getCookieTask(): Task[] {
   try {
     const match = document.cookie.match(
       new RegExp("(?:^|; )" + encodeURIComponent("task") + "=([^;]*)"),
@@ -23,20 +23,20 @@ export function setCookieTask(value: string) {
   try {
     if (value == "") {
       //値が空の時は何もしない
-      return hasCookieTask();
+      return getCookieTask();
     }
     const newTask: Task = { id: crypto.randomUUID(), text: value };
     //保存用配列にタスクをプッシュ
-    const taskList = hasCookieTask();
-    const newTaskList = [...taskList, newTask];
+    const taskArray = getCookieTask();
+    const newtaskArray = [...taskArray, newTask];
     //配列を文字列に変換
-    const encodedValue = encodeURIComponent(JSON.stringify(newTaskList));
+    const encodedValue = encodeURIComponent(JSON.stringify(newtaskArray));
     saveCookieTask(encodedValue);
-    return newTaskList;
+    return newtaskArray;
   } catch (e) {
     //エラー時はログに出して何もしない
     console.error(e)
-    return hasCookieTask();
+    return getCookieTask();
   }
 }
 
@@ -45,20 +45,20 @@ export function setCookieTask(value: string) {
 export function deleteCookieTask(targetId: string) {
   try {
     //指定したタスクを削除
-    const taskList = hasCookieTask();
-    //taskList.splice(target, 1);
-    const newTaskList = taskList.filter((task) => {
+    const taskArray = getCookieTask();
+    //taskArray.splice(target, 1);
+    const newtaskArray = taskArray.filter((task) => {
       return task.id !== targetId;
     });
     //削除した配列でcookieを上書き
-    const encodedValue = encodeURIComponent(JSON.stringify(newTaskList));
+    const encodedValue = encodeURIComponent(JSON.stringify(newtaskArray));
     saveCookieTask(encodedValue);
     //画面向けに再取得
-    return newTaskList;
+    return newtaskArray;
   } catch (e) {
     //エラー時はログに出して何もしない
     console.error(e)
-    return hasCookieTask();
+    return getCookieTask();
   }
 }
 
@@ -74,7 +74,7 @@ export function deleteAllCookieTask() {
   } catch (e) {
     //エラー時はログに出して何もしない
     console.error(e)
-    return hasCookieTask();
+    return getCookieTask();
   }
 }
 

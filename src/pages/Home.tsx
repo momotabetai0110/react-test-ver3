@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { Task } from "../type/task";
 import {
-  hasCookieTask,
+  getCookieTask,
   setCookieTask,
   deleteCookieTask,
   deleteAllCookieTask,
@@ -9,10 +9,10 @@ import {
 
 export default function Home() {
   const [taskName, setTaskName] = useState<string>("");
-  const [taskList, setTaskList] = useState<Task[]>([]);
+  const [taskArray, setTaskArray] = useState<Task[]>([]);
 
   useEffect(() => {
-    setTaskList(hasCookieTask());
+    setTaskArray(getCookieTask());
   }, []);
 
   return (
@@ -22,7 +22,7 @@ export default function Home() {
           className="btn btn-danger"
           onClick={() => {
             if (window.confirm("ほんとに消しますか？")) {
-              setTaskList(deleteAllCookieTask());
+              setTaskArray(deleteAllCookieTask());
             }
           }}
         >
@@ -33,7 +33,7 @@ export default function Home() {
         <div className="App-task-form">
           <form
             onSubmit={(e) => {
-              setTaskList(setCookieTask(taskName));
+              setTaskArray(setCookieTask(taskName));
               e.preventDefault();
               setTaskName("");
             }}
@@ -51,17 +51,17 @@ export default function Home() {
           </form>
         </div>
         <div
-          className={`App-task-list ${taskList.length === 0 ? "empty" : ""}`}
+          className={`App-task-list ${taskArray.length === 0 ? "empty" : ""}`}
         >
-          {taskList.length !== 0 &&
-            taskList.map((task) => {
+          {taskArray.length !== 0 &&
+            taskArray.map((task) => {
               return (
                 <div className="App-task-card" key={task.id}>
                   <div className="App-task-item">{task.text}</div>
                   <div>
                     <button
                       className="btn btn-danger"
-                      onClick={() => setTaskList(deleteCookieTask(task.id))}
+                      onClick={() => setTaskArray(deleteCookieTask(task.id))}
                     >
                       削除
                     </button>
@@ -69,7 +69,7 @@ export default function Home() {
                 </div>
               );
             })}
-          {taskList.length === 0 && <div>タスクはありません</div>}
+          {taskArray.length === 0 && <div>タスクはありません</div>}
         </div>
       </div>
       <div className="App-footer"></div>
