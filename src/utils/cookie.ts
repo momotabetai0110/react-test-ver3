@@ -62,6 +62,22 @@ export function deleteCookieTask(targetId: string) {
   }
 }
 
+//cookieからタスクを全て削除
+//初期化ボタン押下時に実行
+export function deleteAllCookieTask() {
+  try {
+    //削除した配列でcookieを上書き
+    const encodedValue = encodeURIComponent(JSON.stringify([]));
+    saveCookieTask(encodedValue);
+    //画面向けに再取得
+    return [];
+  } catch (e) {
+    //エラー時はログに出して何もしない
+    console.error(e)
+    return hasCookieTask();
+  }
+}
+
 //クッキーにタスクを保存
 function saveCookieTask(value: string) {
   try {

@@ -4,6 +4,7 @@ import {
   hasCookieTask,
   setCookieTask,
   deleteCookieTask,
+  deleteAllCookieTask,
 } from "../utils/cookie";
 
 export default function Home() {
@@ -16,7 +17,18 @@ export default function Home() {
 
   return (
     <div className="App">
-      <div className="App-header"></div>
+      <div className="App-header">
+        <button
+          className="btn btn-danger"
+          onClick={() => {
+            if (window.confirm("ほんとに消しますか？")) {
+              setTaskList(deleteAllCookieTask());
+            }
+          }}
+        >
+          初期化
+        </button>
+      </div>
       <div className="App-body">
         <div className="App-task-form">
           <form
