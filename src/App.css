@@ -18,7 +18,7 @@
   color: white;
   border-bottom: white solid 1px;
 }
-.App-header button{
+.App-header button {
   margin-right: 3rem;
 }
 .App-body {
@@ -47,7 +47,7 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
   align-items: center;
-  justify-content:space-around
+  justify-content: space-around;
 }
 .App-task-form form {
   display: flex;
@@ -57,6 +57,26 @@
 .App-task-input {
   margin-right: 1rem;
 }
+.App-task-tab {
+  display: flex;
+  flex-direction: column;
+}
+.App-task-tab-header{
+display: flex;
+}
+.App-task-tab-button {
+  display: flex;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  background-color: rgba(177, 177, 177, 0.473);
+  color: black;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.App-task-tab-button.active {
+  background-color: white;
+}
+
 .App-task-list {
   width: 90vw;
   height: 60vh;
