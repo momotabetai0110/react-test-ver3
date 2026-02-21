@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { Task, TaskList } from "../type/task";
 import {
   getCookieList,
-  setCookieTask,
+  addCookieTask,
   deleteCookieTask,
   deleteAllCookieTask,
   addCookieList,
@@ -26,13 +26,22 @@ export default function Home() {
     setViewTasks(targetTasks?.tasks);
   }
 
-  useEffect(() => {
+  //クッキーを再読み込みし、画面に反映する
+  function reloadCookie() {
     const list = getCookieList();
     setListArray(list);
     if (list.length !== 0 && list[0].id) {
       setActiveTab(list[0].id);
       setViewTasks(list[0].tasks);
     }
+  }
+
+  useEffect(() => {
+    //クッキーが存在していない場合は初期化する
+    if (getCookieList.length === 0) {
+      deleteAllCookieTask();
+    }
+    reloadCookie();
   }, []);
 
   return (
@@ -43,12 +52,7 @@ export default function Home() {
           onClick={() => {
             if (window.confirm("ほんとに消しますか？")) {
               deleteAllCookieTask();
-              const list = getCookieList();
-              setListArray(list);
-              if (list.length !== 0 && list[0].id) {
-                setActiveTab(list[0].id);
-                setViewTasks(list[0].tasks);
-              }
+              reloadCookie();
             }
           }}
         >
@@ -67,7 +71,7 @@ export default function Home() {
           >
             <input
               className="App-task-input"
-              type="string"
+              type="text"
               value={inputList}
               placeholder="リストを追加..."
               onChange={(e) => setInputList(e.target.value)}
@@ -106,8 +110,15 @@ export default function Home() {
                         <button
                           className="btn btn-danger"
                           onClick={() => {
-                            setViewTasks(deleteCookieTask(activeTab, task.id));
-                            setListArray(getCookieList());
+                            const newList = deleteCookieTask(
+                              activeTab,
+                              task.id,
+                            );
+                            setViewTasks(
+                              newList.find((list) => list.id === activeTab)
+                                ?.tasks ?? [],
+                            );
+                            setListArray(newList);
                           }}
                         >
                           削除
@@ -121,15 +132,18 @@ export default function Home() {
               (viewTasks.length === 0 && <div>タスクはありません</div>)}
             <form
               onSubmit={(e) => {
-                setViewTasks(setCookieTask(activeTab, inputTask));
-                setListArray(getCookieList());
+                const newList = addCookieTask(activeTab, inputTask);
+                setViewTasks(
+                  newList.find((list) => list.id === activeTab)?.tasks ?? [],
+                );
+                setListArray(newList);
                 e.preventDefault();
                 setInputTask("");
               }}
             >
               <input
                 className="App-task-input"
-                type="string"
+                type="text"
                 value={inputTask}
                 placeholder="タスクを入力..."
                 onChange={(e) => setInputTask(e.target.value)}

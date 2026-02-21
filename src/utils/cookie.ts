@@ -19,11 +19,11 @@ export function getCookieList(): TaskList[] {
 
 //指定したリストIDにタスクを追加
 //タスク追加ボタン押下時に実行
-export function setCookieTask(listId: string, value: string) {
+export function addCookieTask(listId: string, value: string):TaskList[]{
   try {
-    if (value == "") {
+    if (value === "") {
       //値が空の時は何もしない
-      return getCookieList().find((list) => list.id === listId)?.tasks ?? [];
+      return getCookieList();
     }
     const newTask: Task = { id: crypto.randomUUID(), text: value };
     //保存用配列にタスクをプッシュ
@@ -34,20 +34,18 @@ export function setCookieTask(listId: string, value: string) {
     //配列を文字列に変換
     const encodedValue = encodeURIComponent(JSON.stringify(newListArray));
     saveCookie("TaskList", encodedValue);
-    const newTaskArray: Task[] =
-      newListArray.find((list) => list.id === listId)?.tasks ?? [];
-    return newTaskArray;
+    return newListArray;
   } catch (e) {
     //エラー時はログに出して何もしない
     console.error(e);
-    return getCookieList().find((list) => list.id === listId)?.tasks ?? [];
+    return getCookieList();
   }
 }
 
 //リストを追加し、追加後のタスクリストを返す
 export function addCookieList(value: string) {
   try {
-    if (value == "") {
+    if (value === "") {
       //値が空の時は何もしない
       return getCookieList();
     }
@@ -73,12 +71,12 @@ export function addCookieList(value: string) {
 
 //cookieからタスクを削除
 //削除ボタン押下時に実行
-export function deleteCookieTask(listId: string, targetId: string) {
+export function deleteCookieTask(listId: string, targetId: string): TaskList[] {
   try {
     //指定したタスクを削除
     const listArray = getCookieList();
     const targetList = listArray.find((list) => list.id === listId);
-    const newTaskArray = targetList?.tasks.filter((task) => {
+    const newTaskArray = (targetList?.tasks ?? []).filter((task) => {
       return task.id !== targetId;
     });
     const newListArray = listArray.map((list) =>
@@ -88,10 +86,11 @@ export function deleteCookieTask(listId: string, targetId: string) {
     const encodedValue = encodeURIComponent(JSON.stringify(newListArray));
     saveCookie("TaskList", encodedValue);
     //画面向けに再取得
-    return newTaskArray;
+    return newListArray;
   } catch (e) {
     //エラー時はログに出して何もしない
     console.error(e);
+    return getCookieList();
   }
 }
 
@@ -99,32 +98,15 @@ export function deleteCookieTask(listId: string, targetId: string) {
 //初期化ボタン押下時に実行
 export function deleteAllCookieTask() {
   try {
-    const defaultList =[{id:"abcdefg",name:"サンプル",tasks:[]}]
+    const defaultList = [{ id: "abcdefg", name: "サンプル", tasks: [] }];
     //削除した配列でcookieを上書き
     const encodedValue = encodeURIComponent(JSON.stringify(defaultList));
     saveCookie("TaskList", encodedValue);
     //画面向けに再取得
-    return [];
   } catch (e) {
     //エラー時はログに出して何もしない
     console.error(e);
-  }
-}
-
-//クッキーにタスクを保存
-function saveCookieTask(value: string) {
-  try {
-    //cookieの保存期限を定義
-    const expires = new Date();
-    expires.setDate(expires.getDate() + 7);
-    //cookieに保存するnameを定義
-    const name = encodeURIComponent("task");
-    //cookieに値を保存
-    document.cookie = `${name}=${value}; path=/; expires=${expires.toUTCString()}`;
-  } catch (e) {
-    //エラー時はログに出して呼び出し元にエラーを伝える
-    console.error(e);
-    throw e;
+    return;
   }
 }
 
